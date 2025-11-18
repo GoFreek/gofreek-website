@@ -1,3 +1,7 @@
+
+Go Freek Website
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -149,9 +153,9 @@
         .hero-logo {
             margin-bottom: 2rem;
             width: 100%;
-            max-width: 1400px;
-            height: 600px;
-            max-height: 70vh;
+            max-width: 100%;
+            height: 80vh;
+            min-height: 500px;
         }
         
             width: 100%;
@@ -418,8 +422,7 @@
             margin-top: 2rem;
         }
         
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
+        /* Mobile Responsive */            @media (max-width: 768px) {
             .nav-links {
                 position: fixed;
                 top: 76px;
@@ -448,8 +451,9 @@
             
             .hero-logo {
                 width: 100%;
-                max-width: 90vw;
-                height: 400px;
+                max-width: 100%;
+                height: 60vh;
+                min-height: 400px;
             }
             
             .contact-form {
@@ -636,8 +640,8 @@
             if (!canvas) return;
             
             scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-            camera.position.z = 4;
+            camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            camera.position.z = 2.5;
             
             renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
             renderer.setSize(canvas.clientWidth, canvas.clientHeight);
@@ -665,13 +669,13 @@
                     }
                 });
                 scene.add(logoMesh);
-                // Center and scale
+                // Center and scale - MUCH BIGGER
                 const box = new THREE.Box3().setFromObject(logoMesh);
                 const center = box.getCenter(new THREE.Vector3());
                 logoMesh.position.sub(center);
                 const size = box.getSize(new THREE.Vector3());
                 const maxDim = Math.max(size.x, size.y, size.z);
-                const scale = 2 / maxDim;
+                const scale = 3.5 / maxDim; // Increased from 2 to 3.5 for massive size
                 logoMesh.scale.setScalar(scale);
             }, undefined, function(error) {
                 console.error('Error loading logo:', error);
