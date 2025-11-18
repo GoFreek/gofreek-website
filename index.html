@@ -148,23 +148,28 @@
         
         .hero-logo {
             margin-bottom: 2rem;
-            width: 100%;
-            max-width: 100%;
+            width: 100vw;
+            max-width: 100vw;
             height: 85vh;
             min-height: 600px;
             position: relative;
+            left: 50%;
+            transform: translateX(-50%);
             overflow: visible;
         }
-        
         
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 120%;
-            height: 120%;
+            width: 100%;
+            height: 100%;
             cursor: grab;
             display: block;
+            filter: drop-shadow(0 0 40px rgba(168, 255, 0, 0.5)) drop-shadow(0 0 80px rgba(168, 255, 0, 0.3));
+        }
+        
+            cursor: grabbing;
         }
         
             cursor: grabbing;
@@ -454,16 +459,18 @@
             }
             
             .hero-logo {
-                width: 100%;
-                max-width: 100%;
+                width: 100vw;
+                max-width: 100vw;
                 height: 70vh;
                 min-height: 500px;
                 position: relative;
+                left: 50%;
+                transform: translateX(-50%);
                 overflow: visible;
             }
             
-                width: 120%;
-                height: 120%;
+                width: 100%;
+                height: 100%;
             }
             
             .contact-form {
@@ -766,9 +773,9 @@
                 window.audioOscillators = [osc1, osc2, osc3];
                 window.audioFilter = filter;
                 
-                osc1.frequency.value = 110; // Trombone-like A2
-                osc2.frequency.value = 110;
-                osc3.frequency.value = 110;
+                osc1.frequency.value = 73; // Deep D2
+                osc2.frequency.value = 73;
+                osc3.frequency.value = 73;
                 
                 osc1.start();
                 osc2.start();
@@ -791,9 +798,9 @@
             const delta = now - lastRotationTime;
             lastRotationTime = now;
             
-            // Brass frequency range (trombone: 82-440Hz)
+            // Deep brass frequency range
             const speed = Math.min(1 / (delta / 20), 1.8);
-            const targetFreq = 110 + (speed * 80); // A2 to D3 range
+            const targetFreq = 73 + (speed * 55); // D2 to G2 range
             
             // Modulate all oscillators
             window.audioOscillators.forEach(osc => {
