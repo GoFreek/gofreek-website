@@ -156,6 +156,7 @@
             left: 50%;
             transform: translateX(-50%);
             overflow: visible;
+            padding: 10vh 0;
         }
         
             position: absolute;
@@ -467,6 +468,7 @@
                 left: 50%;
                 transform: translateX(-50%);
                 overflow: visible;
+                padding: 8vh 0;
             }
             
                 width: 100%;
@@ -686,13 +688,13 @@
                     }
                 });
                 scene.add(logoMesh);
-                // Center and scale - MUCH BIGGER
+                // Center and scale with PADDING FIX - slightly reduced to fit with padding
                 const box = new THREE.Box3().setFromObject(logoMesh);
                 const center = box.getCenter(new THREE.Vector3());
                 logoMesh.position.sub(center);
                 const size = box.getSize(new THREE.Vector3());
                 const maxDim = Math.max(size.x, size.y, size.z);
-                const scale = 5.5 / maxDim; // MASSIVE - increased from 3.5 to 5.5
+                const scale = 4.2 / maxDim; // Reduced from 5.5 to allow padding space
                 logoMesh.scale.setScalar(scale);
             }, undefined, function(error) {
                 console.error('Error loading logo:', error);
