@@ -148,9 +148,9 @@
         
         .hero-logo {
             margin-bottom: 2rem;
-            width: 700px;
-            height: 400px;
-            max-width: 90vw;
+            width: 900px;
+            height: 500px;
+            max-width: 95vw;
         }
         
             width: 100%;
@@ -446,8 +446,8 @@
             }
             
             .hero-logo {
-                width: 400px;
-                height: 250px;
+                width: 600px;
+                height: 350px;
             }
             
             .contact-form {
@@ -627,7 +627,7 @@
         let scene, camera, renderer, logoMesh, controls, audioContext, oscillator, gainNode;
         let isAudioEnabled = false;
         let lastRotationTime = 0;
-        const baseFreq = 65; // Ultra-deep brass frequency (C2)
+        const baseFreq = 55; // Ultra-deep sub-bass frequency (A1)
         
         function init3DLogo() {
             const canvas = document.getElementById('logo-canvas');
@@ -695,14 +695,14 @@
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
             if (audioContext) {
                 oscillator = audioContext.createOscillator();
-                oscillator.type = 'triangle'; // Smooth brass-like wave
+                oscillator.type = 'sine'; // Pure sine wave for clean sub-bass
                 gainNode = audioContext.createGain();
                 
-                // Lowpass filter for ultra-deep brass tone
+                // Aggressive lowpass filter for pure sub-bass (removes 8-bit artifacts)
                 const filter = audioContext.createBiquadFilter();
                 filter.type = 'lowpass';
-                filter.frequency.value = 400; // Cut high frequencies for deeper warmth
-                filter.Q.value = 2;
+                filter.frequency.value = 150; // Cut everything above sub-bass range
+                filter.Q.value = 0.5; // Gentle slope for smoothness
                 
                 oscillator.connect(filter);
                 filter.connect(gainNode);
@@ -726,10 +726,10 @@
             const delta = now - lastRotationTime;
             lastRotationTime = now;
             
-            // Modulate frequency smoothly for ultra-deep brass swell (65-130Hz range)
+            // Modulate frequency smoothly for pure sub-bass swell (55-80Hz range only)
             const speed = Math.min(1 / (delta / 20), 1.5);
-            const targetFreq = baseFreq + (speed * 65); // 65-130Hz (C2-C3)
-            oscillator.frequency.linearRampToValueAtTime(targetFreq, audioContext.currentTime + 0.2);
+            const targetFreq = baseFreq + (speed * 25); // 55-80Hz (A1-E2) - pure sub-bass
+            oscillator.frequency.linearRampToValueAtTime(targetFreq, audioContext.currentTime + 0.3);
             
             // Deep, resonant volume swell
             gainNode.gain.linearRampToValueAtTime(0.12 * speed, audioContext.currentTime);
