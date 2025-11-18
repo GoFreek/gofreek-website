@@ -150,24 +150,26 @@
             margin-bottom: 2rem;
             width: 100vw;
             max-width: 100vw;
-            height: 85vh;
-            min-height: 600px;
-            position: relative;
-            left: 50%;
-            transform: translateX(-50%);
+            height: 95vh;
+            min-height: 700px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
             overflow: visible;
-            padding: 10vh 0;
+            padding: 0;
+            pointer-events: none;
         }
         
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             cursor: grab;
             display: block;
             filter: drop-shadow(0 0 40px rgba(168, 255, 0, 0.5)) drop-shadow(0 0 80px rgba(168, 255, 0, 0.3));
+            pointer-events: auto;
         }
         
             cursor: grabbing;
@@ -462,17 +464,20 @@
             .hero-logo {
                 width: 100vw;
                 max-width: 100vw;
-                height: 70vh;
-                min-height: 500px;
-                position: relative;
-                left: 50%;
-                transform: translateX(-50%);
+                height: 95vh;
+                min-height: 700px;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
                 overflow: visible;
-                padding: 8vh 0;
+                padding: 0;
+                pointer-events: none;
             }
             
-                width: 100%;
-                height: 100%;
+                width: 100vw;
+                height: 100vh;
+                pointer-events: auto;
             }
             
             .contact-form {
@@ -694,7 +699,7 @@
                 logoMesh.position.sub(center);
                 const size = box.getSize(new THREE.Vector3());
                 const maxDim = Math.max(size.x, size.y, size.z);
-                const scale = 4.2 / maxDim; // Reduced from 5.5 to allow padding space
+                const scale = 7.5 / maxDim; // Massively increased for full screen presence
                 logoMesh.scale.setScalar(scale);
             }, undefined, function(error) {
                 console.error('Error loading logo:', error);
