@@ -140,7 +140,7 @@
             transform: translateX(-50%);
             width: 90vw;
             max-width: 1200px;
-            height: 40vh;
+            height: 45vh;
             z-index: 2;
             pointer-events: none;
         }
@@ -159,7 +159,7 @@
         .hero .tagline {
             font-size: clamp(1rem, 3vw, 1.5rem);
             color: var(--neon-green);
-            margin-top: 50vh;
+            margin-top: 55vh;
             margin-bottom: 1.5rem;
             font-weight: 600;
             letter-spacing: 0.02em;
@@ -469,8 +469,8 @@
             
             .nav-links.active { transform: translateX(0); }
             .menu-toggle { display: block; }
-            .hero-logo { top: 100px; height: 30vh; }
-            .hero .tagline { margin-top: 40vh; }
+            .hero-logo { top: 100px; height: 35vh; }
+            .hero .tagline { margin-top: 45vh; }
             .hero-stats { flex-direction: column; gap: 1rem; }
             .gutter-tech { padding: 1.5rem; }
             .contact-form { padding: 2rem 1.5rem; }
@@ -655,6 +655,7 @@
         let isAudioEnabled = false;
         let lastRotationTime = Date.now();
         const baseFreq = 73;
+        let logoRadius = null;
         
         function fitCameraToSphere(camera, controls, radius) {
             const fov = THREE.MathUtils.degToRad(camera.fov);
@@ -687,6 +688,7 @@
             
             renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
             renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio || 1);
             renderer.setClearColor(0x000000, 0);
             
             const ambientLight = new THREE.AmbientLight(0xa8ff00, 0.6);
@@ -694,6 +696,14 @@
             const pointLight = new THREE.PointLight(0xa8ff00, 1.5, 100);
             pointLight.position.set(5, 5, 5);
             scene.add(pointLight);
+            
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.enableZoom = false;
+            controls.enablePan = false;
+            controls.minPolarAngle = Math.PI * 0.2;
+            controls.maxPolarAngle = Math.PI * 0.8;
             
             const loader = new THREE.GLTFLoader();
             loader.load('GoFreek-Logo-3D.gltf', function(gltf) {
@@ -723,22 +733,14 @@
                 
                 const sphere = new THREE.Sphere();
                 box.getBoundingSphere(sphere);
-                const radius = sphere.radius;
+                logoRadius = sphere.radius;
                 
-                fitCameraToSphere(camera, controls, radius);
+                fitCameraToSphere(camera, controls, logoRadius);
                 
-                controls.minDistance = radius * 1.1;
-                controls.maxDistance = radius * 4;
+                controls.minDistance = logoRadius * 1.1;
+                controls.maxDistance = logoRadius * 4;
                 controls.update();
             });
-            
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-            controls.enableZoom = false;
-            controls.enablePan = false;
-            controls.minPolarAngle = Math.PI * 0.2;
-            controls.maxPolarAngle = Math.PI * 0.8;
             
             setupAudio();
             canvas.addEventListener('click', enableAudio);
@@ -747,9 +749,14 @@
             function onResize() {
                 const w = container.clientWidth;
                 const h = container.clientHeight;
+                
                 renderer.setSize(w, h);
                 camera.aspect = w / h;
                 camera.updateProjectionMatrix();
+                
+                if (logoRadius !== null) {
+                    fitCameraToSphere(camera, controls, logoRadius);
+                }
             }
             
             window.addEventListener('resize', onResize);
