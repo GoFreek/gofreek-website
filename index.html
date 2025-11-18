@@ -43,12 +43,18 @@
             margin: 0 auto;
             padding: 1.5rem 2rem;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
         }
         
         .logo {
-            display: none;
+            display: flex;
+            filter: drop-shadow(0 0 20px rgba(168, 255, 0, 0.6));
+            transition: filter 0.3s;
+        }
+        
+        .logo:hover {
+            filter: drop-shadow(0 0 30px rgba(168, 255, 0, 0.9));
         }
         
         .logo-img {
@@ -58,10 +64,8 @@
         
         .nav-links {
             display: flex;
-            gap: 4rem;
+            gap: 3rem;
             list-style: none;
-            justify-content: center;
-            width: 100%;
         }
         
         .nav-links a {
@@ -140,23 +144,15 @@
         }
         
         .hero-logo {
-            margin-bottom: 2rem;
-            filter: drop-shadow(0 0 30px rgba(168, 255, 0, 0.6));
-            animation: logoGlow 3s ease-in-out infinite;
-        }
-        
-        .hero-logo img {
-            height: clamp(120px, 20vw, 200px);
-            width: auto;
-        }
-        
-        @keyframes logoGlow {
-            0%, 100% { filter: drop-shadow(0 0 30px rgba(168, 255, 0, 0.6)); }
-            50% { filter: drop-shadow(0 0 50px rgba(168, 255, 0, 0.9)); }
+            display: none;
         }
         
         .hero h1 {
-            display: none;
+            font-size: clamp(3rem, 12vw, 7rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+            text-shadow: 0 0 40px rgba(168, 255, 0, 0.5);
         }
         
         .hero .tagline {
@@ -503,6 +499,9 @@
     <!-- Navigation -->
     <nav>
         <div class="nav-content">
+            <div class="logo">
+                <img src="Go-Freek-Logo-2024.jpg" alt="GO FREEK" class="logo-img">
+            </div>
             <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">☰</button>
             <ul class="nav-links" id="navMenu">
                 <li><a href="#music" onclick="closeMenu()">Music</a></li>
@@ -516,9 +515,7 @@
     <!-- Hero -->
     <section class="hero">
         <div class="hero-content">
-            <div class="hero-logo">
-                <img src="Go-Freek-Logo-2024.jpg" alt="GO FREEK">
-            </div>
+            <h1>GO FREEK</h1>
             <p class="tagline">Architect of Gutter Tech</p>
             <div class="hero-stats">
                 <span>100M+ Streams</span>
@@ -551,47 +548,14 @@
     <!-- Mixes -->
     <section id="mixes">
         <h2 class="section-title">Mixes</h2>
-        <div class="tour-list">
-            <div class="tour-item">
-                <div class="tour-date">94.1K</div>
-                <div class="tour-details">
-                    <h3>Compound Tape Series</h3>
-                    <p>Complete playlist collection</p>
-                </div>
-                <a href="https://soundcloud.com/gofreek/sets/compound-tape-series?si=0b7312f5c3d0458abaddcc40099202f6" target="_blank" class="tour-link">Listen</a>
+        <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+            <p style="color: var(--text-gray); margin-bottom: 2rem; line-height: 1.8;">
+                The <strong style="color: var(--neon-green);">Compound Tape Series</strong> showcases the evolution of Gutter Tech across 94.1K plays. From the raw foundations to peak production, this collection includes the Triple J Mix Up national radio appearance and the legendary EDC Las Vegas 2016 live recording.
+            </p>
+            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(168, 255, 0, 0.2); border-radius: 8px; padding: 2rem; margin-bottom: 2rem;">
+                <iframe width="100%" height="450" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/1291915108&color=%23a8ff00&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
             </div>
-            <div class="tour-item">
-                <div class="tour-date">29.9K</div>
-                <div class="tour-details">
-                    <h3>Compound Tape III</h3>
-                    <p>Peak production showcase</p>
-                </div>
-                <a href="https://soundcloud.com/gofreek/compound-tape-iii" target="_blank" class="tour-link">Play</a>
-            </div>
-            <div class="tour-item">
-                <div class="tour-date">22.2K</div>
-                <div class="tour-details">
-                    <h3>Compound Tape II</h3>
-                    <p>Gutter Tech foundation</p>
-                </div>
-                <a href="https://soundcloud.com/gofreek/compound-tape-vol-2" target="_blank" class="tour-link">Play</a>
-            </div>
-            <div class="tour-item">
-                <div class="tour-date">8,274</div>
-                <div class="tour-details">
-                    <h3>Triple J Mix Up</h3>
-                    <p>National radio appearance</p>
-                </div>
-                <a href="https://soundcloud.com/gofreek/go-freek-triple-j-mix-up" target="_blank" class="tour-link">Play</a>
-            </div>
-            <div class="tour-item">
-                <div class="tour-date">14.6K</div>
-                <div class="tour-details">
-                    <h3>EDC Las Vegas 2016</h3>
-                    <p>Live festival recording</p>
-                </div>
-                <a href="https://soundcloud.com/gofreek/go-freek-live-edc-las-vegas-2016-sirius-xm-rip" target="_blank" class="tour-link">Play</a>
-            </div>
+            <a href="https://soundcloud.com/gofreek/sets/compound-tape-series" target="_blank" class="btn btn-primary">View Full Playlist on SoundCloud</a>
         </div>
     </section>
 
