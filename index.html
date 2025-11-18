@@ -54,6 +54,11 @@
             color: var(--neon-green);
         }
         
+        .logo-img {
+            height: 50px;
+            width: auto;
+        }
+        
         .nav-links {
             display: flex;
             gap: 2.5rem;
@@ -94,9 +99,23 @@
             text-align: center;
             padding: 8rem 2rem 4rem;
             position: relative;
+            background-image: url('GO-FREEK-HERO-PRESS-SHOT-1-SELECTIVE-COLOUR-2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
         
         .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(10, 10, 10, 0.7), rgba(10, 10, 10, 0.85));
+        }
+        
+        .hero::after {
             content: '';
             position: absolute;
             top: 50%;
@@ -104,8 +123,9 @@
             transform: translate(-50%, -50%);
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle, rgba(168, 255, 0, 0.08), transparent 70%);
+            background: radial-gradient(circle, rgba(168, 255, 0, 0.12), transparent 70%);
             animation: pulse 8s ease-in-out infinite;
+            pointer-events: none;
         }
         
         @keyframes pulse {
@@ -467,7 +487,9 @@
     <!-- Navigation -->
     <nav>
         <div class="nav-content">
-            <div class="logo">GO FREEK</div>
+            <div class="logo">
+                <img src="Go-Freek-Logo-2024.jpg" alt="GO FREEK" class="logo-img">
+            </div>
             <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">☰</button>
             <ul class="nav-links" id="navMenu">
                 <li><a href="#music" onclick="closeMenu()">Music</a></li>
