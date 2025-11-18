@@ -57,7 +57,6 @@
             overflow-x: hidden;
         }
         
-        /* Navigation */
         nav {
             position: fixed;
             top: 0;
@@ -115,7 +114,6 @@
             padding: 0;
         }
         
-        /* Hero Section */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -149,10 +147,12 @@
         
         .hero-logo {
             position: absolute;
-            top: 80px;
-            left: 0;
-            width: 100vw;
-            height: 60vh;
+            top: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90vw;
+            max-width: 1200px;
+            height: 40vh;
             z-index: 2;
             pointer-events: none;
         }
@@ -173,7 +173,7 @@
         .hero .tagline {
             font-size: clamp(1rem, 3vw, 1.5rem);
             color: var(--neon-green);
-            margin-top: 65vh;
+            margin-top: 50vh;
             margin-bottom: 1.5rem;
             font-weight: 600;
             letter-spacing: 0.02em;
@@ -202,7 +202,6 @@
             margin-top: 3rem;
         }
         
-        /* Buttons */
         .btn {
             padding: 1rem 2.5rem;
             font-size: 0.9rem;
@@ -237,7 +236,6 @@
             color: var(--bg-black);
         }
         
-        /* Section Base */
         section {
             padding: 6rem 2rem;
             max-width: 1200px;
@@ -253,7 +251,6 @@
             color: var(--neon-green);
         }
         
-        /* Music Section */
         .music-player {
             max-width: 800px;
             margin: 0 auto 3rem;
@@ -292,7 +289,6 @@
             color: var(--neon-green);
         }
         
-        /* About Section */
         .about-content {
             max-width: 800px;
             margin: 0 auto;
@@ -348,7 +344,6 @@
             left: 0;
         }
         
-        /* Mixes Section */
         .mixes-content {
             max-width: 800px;
             margin: 0 auto;
@@ -368,7 +363,6 @@
             border: none;
         }
         
-        /* EPK Section */
         .epk-downloads {
             display: flex;
             flex-direction: column;
@@ -393,7 +387,6 @@
             color: var(--bg-black);
         }
         
-        /* Tour, Contact Sections */
         .tour-content, .epk-content, .contact-content {
             text-align: center;
             max-width: 600px;
@@ -475,7 +468,6 @@
             resize: vertical;
         }
         
-        /* Newsletter Form */
         .newsletter {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(168, 255, 0, 0.1);
@@ -536,7 +528,6 @@
             border: 2px solid var(--neon-green);
         }
         
-        /* Footer */
         footer {
             border-top: 1px solid rgba(168, 255, 0, 0.1);
             padding: 3rem 2rem;
@@ -578,7 +569,6 @@
             margin-top: 2rem;
         }
         
-        /* Mobile Responsive */
         @media (max-width: 768px) {
             .nav-links {
                 position: fixed;
@@ -602,11 +592,12 @@
             }
             
             .hero-logo {
-                height: 50vh;
+                top: 100px;
+                height: 30vh;
             }
             
             .hero .tagline {
-                margin-top: 55vh;
+                margin-top: 40vh;
             }
             
             .hero-stats {
@@ -621,23 +612,10 @@
             .contact-form {
                 padding: 2rem 1.5rem;
             }
-            
-            .epk-downloads {
-                gap: 0.5rem;
-            }
-            
-            .newsletter-form {
-                max-width: 100%;
-            }
-            
-            .social-links {
-                gap: 1rem;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav>
         <div class="nav-content">
             <div class="nav-brand">GOFREEK.COM</div>
@@ -653,7 +631,6 @@
         </div>
     </nav>
 
-    <!-- Hero -->
     <section class="hero">
         <div class="hero-content">
             <div class="hero-logo">
@@ -674,7 +651,6 @@
         </div>
     </section>
 
-    <!-- Music -->
     <section id="music">
         <h2 class="section-title">Music</h2>
         <div class="music-player">
@@ -688,7 +664,6 @@
         </div>
     </section>
 
-    <!-- About -->
     <section id="about">
         <h2 class="section-title">About Go Freek</h2>
         <div class="about-content">
@@ -708,7 +683,6 @@
         </div>
     </section>
 
-    <!-- Mixes -->
     <section id="mixes">
         <h2 class="section-title">Mixes</h2>
         <div class="mixes-content">
@@ -718,7 +692,6 @@
         </div>
     </section>
 
-    <!-- Tour -->
     <section id="tour">
         <h2 class="section-title">Tour</h2>
         <div class="tour-content">
@@ -727,13 +700,12 @@
         </div>
     </section>
 
-    <!-- EPK -->
     <section id="epk">
         <h2 class="section-title">Press Kit</h2>
         <div class="epk-content">
             <p>Complete electronic press kit with bio, photos, technical specs, and booking information.</p>
             <div class="epk-downloads">
-                <a href="GO-FREEK-BIO.pdf" download onclick="gtag('event', 'download', {'event_category': 'EPK', 'event_label': 'Bio PDF'})" class="btn btn-download">Download EPK Bio (PDF)</a>
+                <a href="Go-Freek-EPK-2025.pdf" download onclick="gtag('event', 'download', {'event_category': 'EPK', 'event_label': 'Bio PDF'})" class="btn btn-download">Download EPK Bio (PDF)</a>
                 <a href="tech-rider.pdf" download onclick="gtag('event', 'download', {'event_category': 'EPK', 'event_label': 'Tech Rider PDF'})" class="btn btn-download">Download Tech Rider (PDF)</a>
                 <a href="press-photos.zip" download onclick="gtag('event', 'download', {'event_category': 'EPK', 'event_label': 'Press Photos ZIP'})" class="btn btn-download">Download Press Photos (ZIP)</a>
             </div>
@@ -741,7 +713,6 @@
         </div>
     </section>
 
-    <!-- Contact -->
     <section id="contact">
         <h2 class="section-title">Contact</h2>
         <div class="contact-content">
@@ -774,7 +745,6 @@
         </div>
     </section>
 
-    <!-- Footer with Newsletter -->
     <footer>
         <div class="newsletter">
             <h3>Join the Gutter Tech Frequency</h3>
@@ -837,8 +807,10 @@
             const canvas = document.getElementById('logo-canvas');
             
             scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(55, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-            camera.position.z = 2.5;
+            
+            // WIDER FOV + PULLED BACK CAMERA = NO CLIPPING
+            camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            camera.position.z = 5;
             
             renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
             renderer.setSize(canvas.clientWidth, canvas.clientHeight);
@@ -863,7 +835,8 @@
                         });
                     }
                 });
-                logoMesh.scale.set(4.5, 4.5, 4.5);
+                // CONSERVATIVE SCALE WITH WIDE FOV = PERFECT FIT
+                logoMesh.scale.set(3.5, 3.5, 3.5);
                 scene.add(logoMesh);
             }, undefined, function(error) {
                 console.error('Error loading 3D logo:', error);
@@ -878,7 +851,6 @@
             setupAudio();
             canvas.addEventListener('click', enableAudio);
             controls.addEventListener('change', onRotationChange);
-            
             window.addEventListener('resize', onWindowResize);
             
             animate();
