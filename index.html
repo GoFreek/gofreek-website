@@ -483,6 +483,36 @@
             .gutter-tech { padding: 1.5rem; }
             .contact-form { padding: 2rem 1.5rem; }
         }
+        
+        /* === OVERRIDES: HERO LOGO SIZE / POSITION === */
+        @media (min-width: 769px) {
+            .hero-logo {
+                position: absolute;
+                top: 20px !important;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100vw !important;
+                max-width: 1400px !important;
+                height: 58vh !important;
+                z-index: 2;
+                pointer-events: none;
+            }
+
+            .hero .tagline {
+                margin-top: 68vh !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-logo {
+                top: 50px !important;
+                height: 48vh !important;
+            }
+
+            .hero .tagline {
+                margin-top: 60vh !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -662,7 +692,7 @@
         let scene, camera, renderer, logoMesh, controls, audioContext, oscillators = [], gainNode, filter, convolver;
         let isAudioEnabled = false;
         let lastRotationTime = Date.now();
-        const baseFreq = 73;
+        const baseFreq = 48;
         let logoRadius = null;
         let isActive = true;
         
@@ -787,17 +817,17 @@
             const osc3 = audioContext.createOscillator();
             
             osc1.type = 'sawtooth';
-            osc2.type = 'square';
-            osc3.type = 'triangle';
+            osc2.type = 'sawtooth';
+            osc3.type = 'sine';
             
             osc1.frequency.value = baseFreq;
             osc2.frequency.value = baseFreq * 2;
             osc3.frequency.value = baseFreq * 0.5;
             
             filter = audioContext.createBiquadFilter();
-            filter.type = 'bandpass';
-            filter.frequency.value = 600;
-            filter.Q.value = 5;
+            filter.type = 'lowpass';
+            filter.frequency.value = 260;
+            filter.Q.value = 10;
             
             gainNode = audioContext.createGain();
             gainNode.gain.value = 0;
@@ -844,14 +874,19 @@
             lastRotationTime = now;
             
             const speed = Math.min(1 / (delta / 50), 1.5);
-            const targetFreq = baseFreq + (speed * 55);
+            const targetFreq = baseFreq + (speed * 40);
             
             const rampTime = audioContext.currentTime + 0.15;
             oscillators[0].frequency.linearRampToValueAtTime(targetFreq, rampTime);
             oscillators[1].frequency.linearRampToValueAtTime(targetFreq * 2, rampTime);
             oscillators[2].frequency.linearRampToValueAtTime(targetFreq * 0.5, rampTime);
             
-            filter.frequency.linearRampToValueAtTime(400 + (speed * 300), rampTime);
+            const cutoffBase = 180;
+            const cutoffRange = 420;
+            filter.frequency.linearRampToValueAtTime(
+                cutoffBase + speed * cutoffRange,
+                rampTime
+            );
             
             gainNode.gain.linearRampToValueAtTime(0.05 * speed, audioContext.currentTime);
             gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 1.2);
