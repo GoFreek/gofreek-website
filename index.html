@@ -147,13 +147,13 @@
             width: 100%;
         }
         
-        /* FULL SCREEN 3D LOGO CONTAINER - NO CLIPPING */
+        /* 3D LOGO ANCHORED TO TOP - DOESN'T FOLLOW SCROLL */
         .hero-logo {
-            position: fixed;
-            top: 0;
+            position: absolute;
+            top: 80px; /* Below nav bar */
             left: 0;
             width: 100vw;
-            height: 100vh;
+            height: 60vh; /* Large viewing area */
             z-index: 2;
             pointer-events: none;
         }
@@ -174,8 +174,8 @@
         .hero .tagline {
             font-size: clamp(1rem, 3vw, 1.5rem);
             color: var(--neon-green);
-            margin-bottom: 2.5rem;
-            margin-top: 2rem;
+            margin-top: 65vh; /* Pushes content below the logo */
+            margin-bottom: 1.5rem;
             font-weight: 600;
             letter-spacing: 0.02em;
             text-shadow: 0 0 20px rgba(168, 255, 0, 0.6);
@@ -602,6 +602,14 @@
                 display: block;
             }
             
+            .hero-logo {
+                height: 50vh; /* Smaller on mobile */
+            }
+            
+            .hero .tagline {
+                margin-top: 55vh;
+            }
+            
             .hero-stats {
                 flex-direction: column;
                 gap: 1rem;
@@ -835,11 +843,11 @@
             
             // Scene setup
             scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera = new THREE.PerspectiveCamera(55, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
             camera.position.z = 1.8;
             
             renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
             renderer.setClearColor(0x000000, 0);
             
             // Lighting for neon glow effect
@@ -863,7 +871,7 @@
                         });
                     }
                 });
-                logoMesh.scale.set(7.5, 7.5, 7.5); // LARGE scale for full screen presence
+                logoMesh.scale.set(7.5, 7.5, 7.5);
                 scene.add(logoMesh);
             }, undefined, function(error) {
                 console.error('Error loading 3D logo:', error);
@@ -891,9 +899,9 @@
             if (!audioContext) return;
             
             // Multi-oscillator brass synthesis
-            const osc1 = audioContext.createOscillator(); // Fundamental
-            const osc2 = audioContext.createOscillator(); // Harmonic
-            const osc3 = audioContext.createOscillator(); // Sub-harmonic
+            const osc1 = audioContext.createOscillator();
+            const osc2 = audioContext.createOscillator();
+            const osc3 = audioContext.createOscillator();
             
             osc1.type = 'sawtooth';
             osc2.type = 'square';
@@ -913,7 +921,7 @@
             gainNode = audioContext.createGain();
             gainNode.gain.value = 0;
             
-            // Reverb (convolver for space)
+            // Reverb
             convolver = audioContext.createConvolver();
             createReverb();
             
@@ -934,7 +942,7 @@
         
         function createReverb() {
             const sampleRate = audioContext.sampleRate;
-            const length = sampleRate * 3; // 3 second reverb
+            const length = sampleRate * 3;
             const impulse = audioContext.createBuffer(2, length, sampleRate);
             const left = impulse.getChannelData(0);
             const right = impulse.getChannelData(1);
@@ -961,19 +969,16 @@
             const delta = now - lastRotationTime;
             lastRotationTime = now;
             
-            // Rotation speed modulates pitch (slower = keep lower range)
             const speed = Math.min(1 / (delta / 50), 1.5);
-            const targetFreq = baseFreq + (speed * 55); // 73-128Hz range (D2 to C3)
+            const targetFreq = baseFreq + (speed * 55);
             
             const rampTime = audioContext.currentTime + 0.15;
             oscillators[0].frequency.linearRampToValueAtTime(targetFreq, rampTime);
             oscillators[1].frequency.linearRampToValueAtTime(targetFreq * 2, rampTime);
             oscillators[2].frequency.linearRampToValueAtTime(targetFreq * 0.5, rampTime);
             
-            // Filter sweep for brass expression
             filter.frequency.linearRampToValueAtTime(400 + (speed * 300), rampTime);
             
-            // Volume envelope
             gainNode.gain.linearRampToValueAtTime(0.08 * speed, audioContext.currentTime);
             gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 1.2);
             
@@ -981,21 +986,21 @@
         }
         
         function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
+            const canvas = document.getElementById('logo-canvas');
+            camera.aspect = canvas.clientWidth / canvas.clientHeight;
             camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
         }
         
         function animate() {
             requestAnimationFrame(animate);
             if (controls) controls.update();
             if (logoMesh) {
-                logoMesh.rotation.y += 0.002; // Subtle auto-rotate
+                logoMesh.rotation.y += 0.002;
             }
             renderer.render(scene, camera);
         }
         
-        // Initialize on load
         window.addEventListener('load', init3DLogo);
     </script>
 </body>
