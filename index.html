@@ -135,12 +135,12 @@
         
         .hero-logo {
             position: absolute;
-            top: 90px;
+            top: 50px;
             left: 50%;
             transform: translateX(-50%);
-            width: 90vw;
-            max-width: 1200px;
-            height: 45vh;
+            width: 95vw;
+            max-width: 1300px;
+            height: 50vh;
             z-index: 2;
             pointer-events: none;
         }
@@ -159,7 +159,7 @@
         .hero .tagline {
             font-size: clamp(1rem, 3vw, 1.5rem);
             color: var(--neon-green);
-            margin-top: 55vh;
+            margin-top: 60vh;
             margin-bottom: 1.5rem;
             font-weight: 600;
             letter-spacing: 0.02em;
@@ -469,8 +469,16 @@
             
             .nav-links.active { transform: translateX(0); }
             .menu-toggle { display: block; }
-            .hero-logo { top: 100px; height: 35vh; }
-            .hero .tagline { margin-top: 45vh; }
+            
+            .hero-logo {
+                top: 70px;
+                height: 40vh;
+            }
+            
+            .hero .tagline {
+                margin-top: 50vh;
+            }
+            
             .hero-stats { flex-direction: column; gap: 1rem; }
             .gutter-tech { padding: 1.5rem; }
             .contact-form { padding: 2rem 1.5rem; }
@@ -656,6 +664,11 @@
         let lastRotationTime = Date.now();
         const baseFreq = 73;
         let logoRadius = null;
+        let isActive = true;
+        
+        document.addEventListener('visibilitychange', () => {
+            isActive = !document.hidden;
+        });
         
         function fitCameraToSphere(camera, controls, radius) {
             const fov = THREE.MathUtils.degToRad(camera.fov);
@@ -840,15 +853,16 @@
             
             filter.frequency.linearRampToValueAtTime(400 + (speed * 300), rampTime);
             
-            gainNode.gain.linearRampToValueAtTime(0.08 * speed, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.05 * speed, audioContext.currentTime);
             gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 1.2);
         }
         
         function animate() {
             requestAnimationFrame(animate);
+            if (!isActive) return;
             if (controls) controls.update();
             if (logoMesh) {
-                logoMesh.rotation.y += 0.002;
+                logoMesh.rotation.y += 0.0015;
             }
             renderer.render(scene, camera);
         }
