@@ -43,15 +43,16 @@
             margin: 0 auto;
             padding: 1.5rem 2rem;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
+            position: relative;
         }
         
         .logo {
-            font-size: 1.5rem;
-            font-weight: 900;
-            letter-spacing: 0.1em;
-            color: var(--neon-green);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
         }
         
         .logo-img {
@@ -63,6 +64,8 @@
             display: flex;
             gap: 2.5rem;
             list-style: none;
+            position: absolute;
+            right: 2rem;
         }
         
         .nav-links a {
@@ -87,6 +90,8 @@
             font-size: 1.8rem;
             cursor: pointer;
             padding: 0;
+            position: absolute;
+            right: 2rem;
         }
         
         /* Hero Section */
@@ -112,7 +117,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(to bottom, rgba(10, 10, 10, 0.7), rgba(10, 10, 10, 0.85));
+            background: linear-gradient(to bottom, rgba(10, 10, 10, 0.4), rgba(10, 10, 10, 0.6));
         }
         
         .hero::after {
