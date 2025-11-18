@@ -148,8 +148,8 @@
         
         .hero-logo {
             margin-bottom: 2rem;
-            width: 500px;
-            height: 300px;
+            width: 700px;
+            height: 400px;
             max-width: 90vw;
         }
         
@@ -446,8 +446,8 @@
             }
             
             .hero-logo {
-                width: 300px;
-                height: 200px;
+                width: 400px;
+                height: 250px;
             }
             
             .contact-form {
@@ -627,15 +627,15 @@
         let scene, camera, renderer, logoMesh, controls, audioContext, oscillator, gainNode;
         let isAudioEnabled = false;
         let lastRotationTime = 0;
-        const baseFreq = 110; // Lower frequency for deep brass (A2)
+        const baseFreq = 65; // Ultra-deep brass frequency (C2)
         
         function init3DLogo() {
             const canvas = document.getElementById('logo-canvas');
             if (!canvas) return;
             
             scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-            camera.position.z = 3;
+            camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            camera.position.z = 4;
             
             renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
             renderer.setSize(canvas.clientWidth, canvas.clientHeight);
@@ -698,11 +698,11 @@
                 oscillator.type = 'triangle'; // Smooth brass-like wave
                 gainNode = audioContext.createGain();
                 
-                // Lowpass filter for warm brass tone
+                // Lowpass filter for ultra-deep brass tone
                 const filter = audioContext.createBiquadFilter();
                 filter.type = 'lowpass';
-                filter.frequency.value = 800; // Cut high frequencies for warmth
-                filter.Q.value = 1;
+                filter.frequency.value = 400; // Cut high frequencies for deeper warmth
+                filter.Q.value = 2;
                 
                 oscillator.connect(filter);
                 filter.connect(gainNode);
@@ -726,14 +726,14 @@
             const delta = now - lastRotationTime;
             lastRotationTime = now;
             
-            // Modulate frequency smoothly for deep brass swell (110-220Hz range)
+            // Modulate frequency smoothly for ultra-deep brass swell (65-130Hz range)
             const speed = Math.min(1 / (delta / 20), 1.5);
-            const targetFreq = baseFreq + (speed * 110); // 110-220Hz (A2-A3)
+            const targetFreq = baseFreq + (speed * 65); // 65-130Hz (C2-C3)
             oscillator.frequency.linearRampToValueAtTime(targetFreq, audioContext.currentTime + 0.2);
             
-            // Gentle volume swell
-            gainNode.gain.linearRampToValueAtTime(0.08 * speed, audioContext.currentTime);
-            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 1.2);
+            // Deep, resonant volume swell
+            gainNode.gain.linearRampToValueAtTime(0.12 * speed, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 1.5);
         }
         
         function onWindowResize() {
