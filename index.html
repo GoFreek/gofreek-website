@@ -49,16 +49,19 @@
         
         .logo {
             display: flex;
-            filter: drop-shadow(0 0 20px rgba(168, 255, 0, 0.6));
-            transition: filter 0.3s;
+            align-items: center;
+            gap: 0.5rem;
         }
         
-        .logo:hover {
-            filter: drop-shadow(0 0 30px rgba(168, 255, 0, 0.9));
+        .logo-text {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-gray);
+            letter-spacing: 0.05em;
         }
         
         .logo-img {
-            height: 50px;
+            height: 35px;
             width: auto;
         }
         
@@ -147,12 +150,15 @@
             display: none;
         }
         
+        .hero-logo-img {
+            max-width: 400px;
+            width: 80%;
+            height: auto;
+            margin-bottom: 2rem;
+        }
+        
         .hero h1 {
-            font-size: clamp(3rem, 12vw, 7rem);
-            font-weight: 900;
-            margin-bottom: 1rem;
-            letter-spacing: 0.05em;
-            text-shadow: 0 0 40px rgba(168, 255, 0, 0.5);
+            display: none;
         }
         
         .hero .tagline {
@@ -272,65 +278,6 @@
             background: rgba(168, 255, 0, 0.1);
             border-color: var(--neon-green);
             color: var(--neon-green);
-        }
-        
-        /* Tour Section */
-        .tour-list {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        
-        .tour-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 2rem;
-            margin-bottom: 1rem;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(168, 255, 0, 0.1);
-            border-radius: 4px;
-            transition: all 0.3s;
-        }
-        
-        .tour-item:hover {
-            background: rgba(168, 255, 0, 0.05);
-            border-color: rgba(168, 255, 0, 0.3);
-        }
-        
-        .tour-date {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--neon-green);
-            min-width: 120px;
-        }
-        
-        .tour-details h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.25rem;
-        }
-        
-        .tour-details p {
-            color: var(--text-gray);
-            font-size: 0.95rem;
-        }
-        
-        .tour-link {
-            padding: 0.5rem 1.5rem;
-            background: transparent;
-            color: var(--neon-green);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            border: 1px solid var(--neon-green);
-            border-radius: 4px;
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
-        
-        .tour-link:hover {
-            background: var(--neon-green);
-            color: var(--bg-black);
         }
         
         /* Contact Section */
@@ -479,16 +426,6 @@
                 gap: 1rem;
             }
             
-            .tour-item {
-                flex-direction: column;
-                text-align: center;
-                gap: 1.5rem;
-            }
-            
-            .tour-date {
-                min-width: auto;
-            }
-            
             .contact-form {
                 padding: 2rem 1.5rem;
             }
@@ -500,7 +437,7 @@
     <nav>
         <div class="nav-content">
             <div class="logo">
-                <img src="Go-Freek-Logo-2024.jpg" alt="GO FREEK" class="logo-img">
+                <span class="logo-text">GOFREEK.COM</span>
             </div>
             <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">☰</button>
             <ul class="nav-links" id="navMenu">
@@ -515,7 +452,7 @@
     <!-- Hero -->
     <section class="hero">
         <div class="hero-content">
-            <h1>GO FREEK</h1>
+            <img src="Go-Freek-Logo-2024.jpg" alt="GO FREEK" class="hero-logo-img">
             <p class="tagline">Architect of Gutter Tech</p>
             <div class="hero-stats">
                 <span>100M+ Streams</span>
@@ -550,10 +487,10 @@
         <h2 class="section-title">Mixes</h2>
         <div style="text-align: center; max-width: 800px; margin: 0 auto;">
             <p style="color: var(--text-gray); margin-bottom: 2rem; line-height: 1.8;">
-                The <strong style="color: var(--neon-green);">Compound Tape Series</strong> showcases the evolution of Gutter Tech across 94.1K plays. From the raw foundations to peak production, this collection includes the Triple J Mix Up national radio appearance and the legendary EDC Las Vegas 2016 live recording.
+                Complete collection of mixes spanning Triple J Mix Up, EDC Las Vegas 2016, and the full Compound Tape series. 94.1K+ plays across all recordings.
             </p>
             <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(168, 255, 0, 0.2); border-radius: 8px; padding: 2rem; margin-bottom: 2rem;">
-                <iframe width="100%" height="450" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/1291915108&color=%23a8ff00&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
+                <iframe width="100%" height="450" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/gofreek/sets/compound-tape-series&color=%23a8ff00&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
             </div>
             <a href="https://soundcloud.com/gofreek/sets/compound-tape-series" target="_blank" class="btn btn-primary">View Full Playlist on SoundCloud</a>
         </div>
