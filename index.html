@@ -148,9 +148,10 @@
         
         .hero-logo {
             margin-bottom: 2rem;
-            width: 900px;
-            height: 500px;
-            max-width: 95vw;
+            width: 100%;
+            max-width: 1400px;
+            height: 600px;
+            max-height: 70vh;
         }
         
             width: 100%;
@@ -446,8 +447,9 @@
             }
             
             .hero-logo {
-                width: 600px;
-                height: 350px;
+                width: 100%;
+                max-width: 90vw;
+                height: 400px;
             }
             
             .contact-form {
@@ -694,21 +696,70 @@
         function setupAudio() {
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
             if (audioContext) {
-                oscillator = audioContext.createOscillator();
-                oscillator.type = 'sine'; // Pure sine wave for clean sub-bass
+                // Create multiple oscillators for rich brass timbre
+                const osc1 = audioContext.createOscillator();
+                const osc2 = audioContext.createOscillator();
+                const osc3 = audioContext.createOscillator();
+                
+                osc1.type = 'sawtooth';
+                osc2.type = 'square';
+                osc3.type = 'triangle';
+                
+                // Detune for brass chorus effect
+                osc2.detune.value = -7;
+                osc3.detune.value = 12;
+                
                 gainNode = audioContext.createGain();
                 
-                // Aggressive lowpass filter for pure sub-bass (removes 8-bit artifacts)
+                // Brass-like filter sweep
                 const filter = audioContext.createBiquadFilter();
-                filter.type = 'lowpass';
-                filter.frequency.value = 150; // Cut everything above sub-bass range
-                filter.Q.value = 0.5; // Gentle slope for smoothness
+                filter.type = 'bandpass';
+                filter.frequency.value = 800;
+                filter.Q.value = 5;
                 
-                oscillator.connect(filter);
-                filter.connect(gainNode);
+                // Reverb using convolver
+                const convolver = audioContext.createConvolver();
+                const reverbLength = audioContext.sampleRate * 3;
+                const impulse = audioContext.createBuffer(2, reverbLength, audioContext.sampleRate);
+                for (let channel = 0; channel < 2; channel++) {
+                    const impulseData = impulse.getChannelData(channel);
+                    for (let i = 0; i < reverbLength; i++) {
+                        impulseData[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / reverbLength, 2.5);
+                    }
+                }
+                convolver.buffer = impulse;
+                
+                // Dry/wet mix
+                const dryGain = audioContext.createGain();
+                const wetGain = audioContext.createGain();
+                dryGain.gain.value = 0.6;
+                wetGain.gain.value = 0.4;
+                
+                // Connect audio graph
+                osc1.connect(filter);
+                osc2.connect(filter);
+                osc3.connect(filter);
+                
+                filter.connect(dryGain);
+                filter.connect(convolver);
+                convolver.connect(wetGain);
+                
+                dryGain.connect(gainNode);
+                wetGain.connect(gainNode);
                 gainNode.connect(audioContext.destination);
-                oscillator.frequency.value = baseFreq;
-                oscillator.start();
+                
+                // Store references
+                window.audioOscillators = [osc1, osc2, osc3];
+                window.audioFilter = filter;
+                
+                osc1.frequency.value = 110; // Trombone-like A2
+                osc2.frequency.value = 110;
+                osc3.frequency.value = 110;
+                
+                osc1.start();
+                osc2.start();
+                osc3.start();
+                
                 gainNode.gain.value = 0;
             }
         }
@@ -721,19 +772,28 @@
         }
         
         function onRotationChange() {
-            if (!isAudioEnabled || !audioContext) return;
+            if (!isAudioEnabled || !audioContext || !window.audioOscillators) return;
             const now = Date.now();
             const delta = now - lastRotationTime;
             lastRotationTime = now;
             
-            // Modulate frequency smoothly for pure sub-bass swell (55-80Hz range only)
-            const speed = Math.min(1 / (delta / 20), 1.5);
-            const targetFreq = baseFreq + (speed * 25); // 55-80Hz (A1-E2) - pure sub-bass
-            oscillator.frequency.linearRampToValueAtTime(targetFreq, audioContext.currentTime + 0.3);
+            // Brass frequency range (trombone: 82-440Hz)
+            const speed = Math.min(1 / (delta / 20), 1.8);
+            const targetFreq = 110 + (speed * 80); // A2 to D3 range
             
-            // Deep, resonant volume swell
-            gainNode.gain.linearRampToValueAtTime(0.12 * speed, audioContext.currentTime);
-            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 1.5);
+            // Modulate all oscillators
+            window.audioOscillators.forEach(osc => {
+                osc.frequency.linearRampToValueAtTime(targetFreq, audioContext.currentTime + 0.4);
+            });
+            
+            // Filter sweep for brass expression
+            window.audioFilter.frequency.linearRampToValueAtTime(600 + (speed * 400), audioContext.currentTime + 0.3);
+            
+            // Volume envelope with brass attack/decay
+            gainNode.gain.cancelScheduledValues(audioContext.currentTime);
+            gainNode.gain.setValueAtTime(gainNode.gain.value, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.15 * speed, audioContext.currentTime + 0.1);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 2);
         }
         
         function onWindowResize() {
