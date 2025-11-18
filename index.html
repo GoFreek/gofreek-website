@@ -3,8 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GO FREEK | Architect of Gutter Tech</title>
-    <meta name="description" content="Go Freek - Australian electronic music producer. 100M+ streams, ARIA Gold certified. Official website.">
+    <title>Go Freek | Architect of Gutter Tech | ARIA Gold Electronic Producer</title>
+    <meta name="description" content="Go Freek, architect of Gutter Tech: Raw, genre-bending electronic music with gritty basslines and industrial textures. 100M+ streams, ARIA Gold certified Australian producer. Official site for music, mixes, bookings.">
+    <meta name="keywords" content="Gutter Tech, Go Freek, electronic music producer, ARIA Gold, tech house, Sweat It Out, Australian DJ, festival bookings, Compound Tape Series">
+    <link rel="canonical" href="https://gofreek.com">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Go Freek | Pioneer of Gutter Tech">
+    <meta property="og:description" content="Discover Gutter Tech: Go Freek's raw electronic sound with 100M+ streams and ARIA Gold. Listen to mixes, book shows, explore the genre.">
+    <meta property="og:image" content="https://gofreek.com/images/og-image.jpg">
+    <meta property="og:url" content="https://gofreek.com">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Go Freek | Architect of Gutter Tech">
+    <meta name="twitter:description" content="Go Freek's Gutter Tech: Industrial electronic music, ARIA Gold certified. 894K monthly listeners. Official site.">
+    <meta name="twitter:image" content="https://gofreek.com/images/og-image.jpg">
+    
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -47,22 +76,12 @@
             align-items: center;
         }
         
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .logo-text {
-            font-size: 1rem;
-            font-weight: 500;
+        .nav-brand {
             color: var(--text-gray);
-            letter-spacing: 0.05em;
-        }
-        
-        .logo-img {
-            height: 35px;
-            width: auto;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
         
         .nav-links {
@@ -93,8 +112,6 @@
             font-size: 1.8rem;
             cursor: pointer;
             padding: 0;
-            position: absolute;
-            right: 2rem;
         }
         
         /* Hero Section */
@@ -147,18 +164,26 @@
         }
         
         .hero-logo {
-            display: none;
-        }
-        
-        .hero-logo-img {
-            max-width: 400px;
-            width: 80%;
-            height: auto;
             margin-bottom: 2rem;
+            width: 300px;
+            height: 200px; /* Adjust for canvas */
         }
         
-        .hero h1 {
-            display: none;
+        #logo-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            cursor: grab;
+        }
+        
+        #logo-canvas:active {
+            cursor: grabbing;
+        }
+        
+        .audio-hint {
+            color: var(--text-gray);
+            font-size: 0.8rem;
+            margin-top: 1rem;
         }
         
         .hero .tagline {
@@ -192,7 +217,7 @@
             margin-top: 3rem;
         }
         
-        /* Buttons */
+        /* [Rest of styles unchanged - buttons, sections, etc.] */
         .btn {
             padding: 1rem 2.5rem;
             font-size: 0.9rem;
@@ -204,6 +229,7 @@
             border-radius: 4px;
             transition: all 0.3s;
             display: inline-block;
+            cursor: pointer;
         }
         
         .btn-primary {
@@ -226,7 +252,17 @@
             color: var(--bg-black);
         }
         
-        /* Section Base */
+        .btn-download {
+            background: transparent;
+            color: var(--neon-green);
+            border-color: var(--neon-green);
+        }
+        
+        .btn-download:hover {
+            background: var(--neon-green);
+            color: var(--bg-black);
+        }
+        
         section {
             padding: 6rem 2rem;
             max-width: 1200px;
@@ -239,6 +275,7 @@
             margin-bottom: 3rem;
             text-align: center;
             letter-spacing: 0.02em;
+            color: var(--neon-green);
         }
         
         /* Music Section */
@@ -280,11 +317,106 @@
             color: var(--neon-green);
         }
         
-        /* Contact Section */
-        .contact-content {
-            max-width: 600px;
+        /* About Section */
+        .about-content {
+            max-width: 800px;
             margin: 0 auto;
             text-align: center;
+        }
+        
+        .about-content p {
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+        
+        .about-content strong {
+            color: var(--neon-green);
+        }
+        
+        .gutter-tech {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(168, 255, 0, 0.1);
+            border-radius: 8px;
+            padding: 2.5rem;
+            margin-top: 3rem;
+        }
+        
+        .gutter-tech h3 {
+            color: var(--neon-green);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .gutter-tech p {
+            margin-bottom: 2rem;
+            color: var(--text-gray);
+        }
+        
+        .gutter-tech ul {
+            list-style: none;
+            text-align: left;
+        }
+        
+        .gutter-tech li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--text-white);
+        }
+        
+        .gutter-tech li::before {
+            content: '▶';
+            color: var(--neon-green);
+            position: absolute;
+            left: 0;
+        }
+        
+        /* Mixes Section */
+        .mixes-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .mixes-content p {
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+        
+        .mixes-content iframe {
+            width: 100%;
+            height: 450px;
+            border-radius: 8px;
+            border: none;
+        }
+        
+        /* EPK Section */
+        .epk-downloads {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 600px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+        
+        .epk-downloads a {
+            display: block;
+        }
+        
+        /* Tour, Contact Sections */
+        .tour-content, .epk-content, .contact-content {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .tour-content p, .epk-content p {
+            color: var(--text-gray);
+            margin-bottom: 2rem;
         }
         
         .contact-info {
@@ -357,6 +489,66 @@
             resize: vertical;
         }
         
+        /* Newsletter Form */
+        .newsletter {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(168, 255, 0, 0.1);
+            border-radius: 4px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .newsletter h3 {
+            color: var(--neon-green);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .newsletter p {
+            color: var(--text-gray);
+            margin-bottom: 1.5rem;
+        }
+        
+        .newsletter-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .newsletter-form input {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(168, 255, 0, 0.2);
+            border-radius: 4px;
+            color: var(--text-white);
+            font-family: inherit;
+        }
+        
+        .newsletter-form input:focus {
+            border-color: var(--neon-green);
+            background: rgba(168, 255, 0, 0.05);
+        }
+        
+        .newsletter-form button {
+            padding: 1rem;
+            background: var(--neon-green);
+            color: var(--bg-black);
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .newsletter-form button:hover {
+            background: transparent;
+            color: var(--neon-green);
+            border: 2px solid var(--neon-green);
+        }
+        
         /* Footer */
         footer {
             border-top: 1px solid rgba(168, 255, 0, 0.1);
@@ -369,6 +561,7 @@
             gap: 1.5rem;
             justify-content: center;
             margin-bottom: 2rem;
+            flex-wrap: wrap;
         }
         
         .social-link {
@@ -426,8 +619,29 @@
                 gap: 1rem;
             }
             
+            .hero-logo {
+                width: 250px;
+                height: 150px;
+            }
+            
+            .gutter-tech {
+                padding: 1.5rem;
+            }
+            
             .contact-form {
                 padding: 2rem 1.5rem;
+            }
+            
+            .epk-downloads {
+                gap: 0.5rem;
+            }
+            
+            .newsletter-form {
+                max-width: 100%;
+            }
+            
+            .social-links {
+                gap: 1rem;
             }
         }
     </style>
@@ -436,13 +650,13 @@
     <!-- Navigation -->
     <nav>
         <div class="nav-content">
-            <div class="logo">
-                <span class="logo-text">GOFREEK.COM</span>
-            </div>
+            <div class="nav-brand">GOFREEK.COM</div>
             <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">☰</button>
             <ul class="nav-links" id="navMenu">
                 <li><a href="#music" onclick="closeMenu()">Music</a></li>
                 <li><a href="#mixes" onclick="closeMenu()">Mixes</a></li>
+                <li><a href="#about" onclick="closeMenu()">About</a></li>
+                <li><a href="#tour" onclick="closeMenu()">Tour</a></li>
                 <li><a href="#epk" onclick="closeMenu()">EPK</a></li>
                 <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
             </ul>
@@ -452,7 +666,10 @@
     <!-- Hero -->
     <section class="hero">
         <div class="hero-content">
-            <img src="Go-Freek-Logo-2024.jpg" alt="GO FREEK" class="hero-logo-img">
+            <div class="hero-logo">
+                <canvas id="logo-canvas"></canvas>
+                <p class="audio-hint">Drag to spin & hear Gutter Tech synth (audio on click)</p>
+            </div>
             <p class="tagline">Architect of Gutter Tech</p>
             <div class="hero-stats">
                 <span>100M+ Streams</span>
@@ -472,7 +689,7 @@
     <section id="music">
         <h2 class="section-title">Music</h2>
         <div class="music-player">
-            <iframe class="spotify-embed" src="https://open.spotify.com/embed/artist/2aRd7rRSUjtZ6WPG5GsBO6?utm_source=generator&theme=0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            <iframe class="spotify-embed" src="https://open.spotify.com/embed/artist/2aRd7rRSUjtZ6WPG5GsBO6?utm_source=generator&theme=0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Go Freek Spotify Artist Profile - Gutter Tech tracks"></iframe>
         </div>
         <div class="platform-links">
             <a href="https://open.spotify.com/artist/2aRd7rRSUjtZ6WPG5GsBO6" target="_blank" class="platform-link">Spotify</a>
@@ -482,16 +699,32 @@
         </div>
     </section>
 
+    <!-- About -->
+    <section id="about">
+        <h2 class="section-title">About Go Freek</h2>
+        <div class="about-content">
+            <p>Go Freek stands as an undeniable force in Australia's electronic music landscape, renowned as the architect of "Gutter Tech"—a raw, genre-bending sound marked by gritty basslines, industrial textures, and precision-engineered percussion. Since joining the Sweat It Out family in 2013, he has carved out a distinct sonic identity, pushing the boundaries of dance music while captivating audiences worldwide. Emerging from Wollongong's underground scene, Go Freek's journey reflects a decade-long evolution that blends underground grit with mainstage euphoria.[file:34]</p>
+            <p>A defining moment came in 2015 with "Define," his breakout collaboration with Dom Dolla, which dominated the ARIA Club Chart at #1 for four consecutive weeks, landed at #2 on the ARIA Club End of Year Chart, and earned an ARIA gold certification. The single has since amassed nearly 100 million streams globally—78.6 million on Spotify alone—establishing Go Freek's production prowess. Standout releases like "Call Out" on Insomniac Records/Interscope and an official remix of Deadmau5's "Channel 43" on mau5trap showcase his versatility, while recent collaborations with artists such as Dope Earth Alien and Lazarusman expand his Gutter Tech vision into new territories.[file:34]</p>
+            <p>On stage, Go Freek commands global festival giants like EDC Las Vegas and Beyond Wonderland, delivering innovative 'Freekquency' sets that fuse raw energy with euphoric highs. His boundary-pushing sound has earned backing from industry titans including Diplo, FISHER, CamelPhat, Claude VonStroke, and Solomun, with roots in Sweat It Out remaining the heartbeat of his artistry. With highly anticipated 2025 releases generating buzz, Go Freek continues redefining modern dance music, delivering bold, authentic sounds that leave an indelible mark on the global electronic landscape—now boasting over 100M+ streams, ARIA Gold certification, and 894K monthly listeners.[file:34]</p>
+            
+            <div class="gutter-tech">
+                <h3>What is Gutter Tech?</h3>
+                <p>Gutter Tech is Go Freek's signature genre, born from the raw underbelly of electronic music, blending industrial edge with dancefloor precision to create a sound that's gritty yet euphoric. This innovative style emerged from his Sweat It Out roots, evolving through years of experimentation to capture the tension between underground authenticity and festival-ready impact. At its core, Gutter Tech redefines tech house by infusing distorted bass, mechanical rhythms, and tribal elements that resonate with modern club culture.[file:34]</p>
+                <ul>
+                    <li><strong>Gritty Basslines:</strong> Deep, distorted low-ends that evoke urban decay, providing the foundational drive for immersive sets.[file:34]</li>
+                    <li><strong>Industrial Textures:</strong> Layered metallic percussion and atmospheric noise, adding raw, mechanical intensity to builds and drops.[file:34]</li>
+                    <li><strong>Precision-Engineered Percussion:</strong> Tight, engineered rhythms that fuse tribal influences with tech precision, ensuring relentless energy on the dancefloor.[file:34]</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
     <!-- Mixes -->
     <section id="mixes">
         <h2 class="section-title">Mixes</h2>
-        <div style="text-align: center; max-width: 800px; margin: 0 auto;">
-            <p style="color: var(--text-gray); margin-bottom: 2rem; line-height: 1.8;">
-                Complete collection of mixes spanning Triple J Mix Up, EDC Las Vegas 2016, and the full Compound Tape series. 94.1K+ plays across all recordings.
-            </p>
-            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(168, 255, 0, 0.2); border-radius: 8px; padding: 2rem; margin-bottom: 2rem;">
-                <iframe width="100%" height="450" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/gofreek/sets/compound-tape-series&color=%23a8ff00&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
-            </div>
+        <div class="mixes-content">
+            <p>The Compound Tape Series represents the evolution of Gutter Tech, with 94.1K plays across the full collection. This playlist captures raw foundations, peak production showcases, the Triple J Mix Up national radio feature, and the EDC Las Vegas 2016 live recording—highlighting Go Freek's dynamic range from underground to festival stages.[file:34]</p>
+            <iframe width="100%" height="450" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fgofreek%2Fsets%2Fcompound-tape-series&color=%23a8ff00&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true" title="Go Freek Compound Tape Series - Gutter Tech mixes on SoundCloud"></iframe>
             <a href="https://soundcloud.com/gofreek/sets/compound-tape-series" target="_blank" class="btn btn-primary">View Full Playlist on SoundCloud</a>
         </div>
     </section>
@@ -499,10 +732,8 @@
     <!-- Tour -->
     <section id="tour">
         <h2 class="section-title">Tour</h2>
-        <div style="text-align: center;">
-            <p style="color: var(--text-gray); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
-                Available for festival bookings, club shows, and private events worldwide.
-            </p>
+        <div class="tour-content">
+            <p>Available for festival bookings, club shows, and private events worldwide.[file:34]</p>
             <a href="#contact" class="btn btn-primary">Book Now</a>
         </div>
     </section>
@@ -510,11 +741,14 @@
     <!-- EPK -->
     <section id="epk">
         <h2 class="section-title">Press Kit</h2>
-        <div style="text-align: center;">
-            <p style="color: var(--text-gray); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
-                Complete electronic press kit with bio, photos, technical specs, and booking information.
-            </p>
-            <a href="mailto:paul.azzopardi@tmrw.com.au?subject=Go%20Freek%20EPK%20Request" class="btn btn-primary">Request EPK</a>
+        <div class="epk-content">
+            <p>Complete electronic press kit with bio, photos, technical specs, and booking information.[file:34]</p>
+            <div class="epk-downloads">
+                <a href="GO-FREEK-BIO.pdf" download onclick="gtag('event', 'download', {'event_category': 'EPK', 'event_label': 'Bio PDF'})" class="btn btn-download">Download EPK Bio (PDF)</a>[file:34]
+                <a href="tech-rider.pdf" download onclick="gtag('event', 'download', {'event_category': 'EPK', 'event_label': 'Tech Rider PDF'})" class="btn btn-download">Download Tech Rider (PDF)</a>[web:1]
+                <a href="press-photos.zip" download onclick="gtag('event', 'download', {'event_category': 'EPK', 'event_label': 'Press Photos ZIP'})" class="btn btn-download">Download Press Photos (ZIP)</a>[web:1]
+            </div>
+            <a href="mailto:paul.azzopardi@tmrw.com.au?subject=Go%20Freek%20EPK%20Request" class="btn btn-primary">Request Full EPK</a>
         </div>
     </section>
 
@@ -527,7 +761,7 @@
                 <p>
                     <strong>Paul Azzopardi</strong><br>
                     TMRW Agency<br>
-                    <a href="mailto:paul.azzopardi@tmrw.com.au">paul.azzopardi@tmrw.com.au</a>
+                    <a href="mailto:paul.azzopardi@tmrw.com.au">paul.azzopardi@tmrw.com.au</a>[file:34]
                 </p>
             </div>
             
@@ -551,19 +785,32 @@
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- Footer with Newsletter -->
     <footer>
+        <div class="newsletter">
+            <h3>Join the Gutter Tech Frequency</h3>
+            <p>Get exclusive mixes, early release access, and tour updates straight to your inbox.[web:1]</p>
+            <form action="https://YOUR_DOMAIN.us21.list-manage.com/subscribe/post?u=YOUR_LIST_ID&id=YOUR_API_KEY" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate class="newsletter-form" onsubmit="gtag('event', 'form_submit', {'event_category': 'Newsletter', 'event_label': 'Signup'})">
+                <input type="email" value="" name="EMAIL" placeholder="Enter your email" id="mce-EMAIL" required>
+                <input type="text" value="" name="FNAME" placeholder="First Name (optional)" id="mce-FNAME">
+                <div style="position: absolute; left: -5000px;" aria-hidden="true">
+                    <input type="text" name="b_YOUR_LIST_ID_YOUR_API_KEY" tabindex="-1" value="">
+                </div>
+                <button type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">Subscribe</button>
+            </form>
+        </div>
         <div class="social-links">
-            <a href="https://www.instagram.com/gofreek" target="_blank" class="social-link" aria-label="Instagram">📷</a>
-            <a href="https://www.facebook.com/gofreek" target="_blank" class="social-link" aria-label="Facebook">f</a>
-            <a href="https://soundcloud.com/gofreek" target="_blank" class="social-link" aria-label="SoundCloud">🎵</a>
-            <a href="https://open.spotify.com/artist/2aRd7rRSUjtZ6WPG5GsBO6" target="_blank" class="social-link" aria-label="Spotify">♫</a>
-            <a href="https://www.youtube.com/channel/UCjW77TRH91L6P_LBQ8yGFnA" target="_blank" class="social-link" aria-label="YouTube">▶</a>
+            <a href="https://www.instagram.com/gofreek" target="_blank" class="social-link" aria-label="Instagram" onclick="gtag('event', 'social_click', {'event_category': 'Social', 'event_label': 'Instagram'})">📷</a>
+            <a href="https://www.facebook.com/gofreek" target="_blank" class="social-link" aria-label="Facebook" onclick="gtag('event', 'social_click', {'event_category': 'Social', 'event_label': 'Facebook'})">f</a>
+            <a href="https://soundcloud.com/gofreek" target="_blank" class="social-link" aria-label="SoundCloud" onclick="gtag('event', 'social_click', {'event_category': 'Social', 'event_label': 'SoundCloud'})">🎵</a>
+            <a href="https://open.spotify.com/artist/2aRd7rRSUjtZ6WPG5GsBO6" target="_blank" class="social-link" aria-label="Spotify" onclick="gtag('event', 'social_click', {'event_category': 'Social', 'event_label': 'Spotify'})">♫</a>
+            <a href="https://www.youtube.com/channel/UCjW77TRH91L6P_LBQ8yGFnA" target="_blank" class="social-link" aria-label="YouTube" onclick="gtag('event', 'social_click', {'event_category': 'Social', 'event_label': 'YouTube'})">▶</a>
         </div>
         <p class="copyright">&copy; 2025 Go Freek. All rights reserved.</p>
     </footer>
 
     <script>
+        // Existing functions (nav, forms, etc.)
         function toggleMenu() {
             document.getElementById('navMenu').classList.toggle('active');
         }
@@ -580,18 +827,170 @@
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth' });
                 }
+                closeMenu();
             });
         });
         
-        // Form submission
+        // Form submission for contact
         function handleSubmit(event) {
             event.preventDefault();
+            gtag('event', 'form_submit', {'event_category': 'Contact', 'event_label': 'Inquiry'});
             const formData = new FormData(event.target);
             const data = Object.fromEntries(formData);
             const subject = encodeURIComponent('Go Freek Inquiry');
             const body = encodeURIComponent(`Name: ${data.name}\nEmail: ${data.email}\n\nMessage:\n${data.message}`);
             window.location.href = `mailto:paul.azzopardi@tmrw.com.au?subject=${subject}&body=${body}`;
         }
+        
+        // 3D Logo with Synth Sound
+        let scene, camera, renderer, logoMesh, controls, audioContext, oscillator, gainNode;
+        let isAudioEnabled = false;
+        let lastRotationTime = 0;
+        const baseFreq = 220; // Low G for gritty bass
+        
+        function init3DLogo() {
+            const canvas = document.getElementById('logo-canvas');
+            const container = canvas.parentElement;
+            
+            // Scene setup
+            scene = new THREE.Scene();
+            scene.background = null; // Transparent for hero overlay
+            
+            camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            camera.position.z = 5;
+            
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            renderer.setClearColor(0x000000, 0);
+            
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xa8ff00, 0.5);
+            scene.add(ambientLight);
+            const pointLight = new THREE.PointLight(0xa8ff00, 1, 100);
+            pointLight.position.set(5, 5, 5);
+            scene.add(pointLight);
+            
+            // Logo Mesh (3D Text - fallback to torus if font load fails)
+            const loader = new THREE.FontLoader();
+            loader.load('https://threejs.org/examples/fonts/helvetica_bold.typeface.json', function (font) {
+                const geometry = new THREE.TextGeometry('GO FREEK', {
+                    font: font,
+                    size: 0.5,
+                    height: 0.1,
+                    curveSegments: 12,
+                    bevelEnabled: true,
+                    bevelThickness: 0.02,
+                    bevelSize: 0.01,
+                    bevelSegments: 5
+                });
+                const material = new THREE.MeshPhongMaterial({ 
+                    color: 0xa8ff00, 
+                    emissive: 0x440000, 
+                    shininess: 100 
+                });
+                logoMesh = new THREE.Mesh(geometry, material);
+                logoMesh.position.x = -1.5;
+                logoMesh.position.y = 0;
+                scene.add(logoMesh);
+            }, undefined, function (error) {
+                // Fallback: Neon torus
+                const geometry = new THREE.TorusGeometry(1.5, 0.3, 16, 100);
+                const material = new THREE.MeshPhongMaterial({ color: 0xa8ff00, emissive: 0x440000 });
+                logoMesh = new THREE.Mesh(geometry, material);
+                scene.add(logoMesh);
+            });
+            
+            // Controls for spinning
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.enableZoom = false;
+            controls.enablePan = false;
+            controls.minPolarAngle = Math.PI / 4;
+            controls.maxPolarAngle = Math.PI * 3 / 4;
+            
+            // Audio setup
+            setupAudio();
+            
+            // Resize handler
+            window.addEventListener('resize', onWindowResize);
+            
+            // Click to enable audio
+            canvas.addEventListener('click', enableAudio);
+            
+            // Track rotation for sound and GA
+            controls.addEventListener('change', onRotationChange);
+            
+            animate();
+        }
+        
+        function setupAudio() {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioContext) {
+                oscillator = audioContext.createOscillator();
+                oscillator.type = 'sawtooth'; // Gritty synth
+                gainNode = audioContext.createGain();
+                const distortion = audioContext.createWaveShaper();
+                // Simple distortion curve
+                const curve = new Float32Array(65536);
+                for (let i = 0; i < 65536; i++) {
+                    const x = (i / 65536) * 2 - 1;
+                    curve[i] = (3 + x * x) * x * 0.1; // Overdrive for industrial edge
+                }
+                distortion.curve = curve;
+                oscillator.connect(distortion);
+                distortion.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                oscillator.frequency.value = baseFreq;
+                oscillator.start();
+                gainNode.gain.value = 0; // Muted initially
+            }
+        }
+        
+        function enableAudio() {
+            if (audioContext && audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            isAudioEnabled = true;
+            gtag('event', 'audio_enable', {'event_category': '3D Logo', 'event_label': 'User Click'});
+        }
+        
+        function onRotationChange() {
+            if (!isAudioEnabled || !audioContext) return;
+            const now = Date.now();
+            const delta = now - lastRotationTime;
+            lastRotationTime = now;
+            
+            // Modulate frequency by rotation speed (simulate spin intensity)
+            const speed = Math.min(1 / (delta / 16), 2); // Normalize to 0-2
+            const targetFreq = baseFreq + (speed * 220); // 220-440Hz swell
+            oscillator.frequency.linearRampToValueAtTime(targetFreq, audioContext.currentTime + 0.1);
+            
+            // Volume pulse
+            gainNode.gain.linearRampToValueAtTime(0.1 * speed, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.5); // Fade out
+            
+            gtag('event', '3d_logo_interact', {'event_category': '3D Logo', 'event_label': 'Rotation', 'value': speed});
+        }
+        
+        function onWindowResize() {
+            const canvas = document.getElementById('logo-canvas');
+            camera.aspect = canvas.clientWidth / canvas.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            if (controls) controls.update();
+            if (logoMesh) {
+                logoMesh.rotation.y += 0.005; // Subtle auto-rotate when idle
+            }
+            renderer.render(scene, camera);
+        }
+        
+        // Init on load
+        window.addEventListener('load', init3DLogo);
     </script>
 </body>
 </html>
