@@ -1,0 +1,89 @@
+name: Urgent website copy patch
+
+on:
+  push:
+    paths:
+      - '.github/workflows/urgent-site-patch.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch-site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Patch delayed release and touring copy
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('index.html')
+          html = path.read_text(encoding='utf-8')
+          original_size = len(html)
+
+          release_pattern = re.compile(
+              r'(<section\b[^>]*\bid=["\']releases["\'][^>]*>).*?(</section>)',
+              flags=re.IGNORECASE | re.DOTALL,
+          )
+
+          replacement = r'''\1
+            <div style="max-width:1200px;margin:0 auto;">
+              <div style="font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#AAFF00;margin-bottom:12px;">NEW MUSIC</div>
+              <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(54px,8vw,110px);line-height:.9;letter-spacing:2px;margin:0 0 36px;">Releases</h2>
+              <div style="border-top:1px solid #1a1a1a;border-bottom:1px solid #1a1a1a;padding:36px 0;">
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,64px);letter-spacing:2px;">NEW MUSIC IN PROGRESS</div>
+                <div style="font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#888;margin-top:10px;">Release updates announced soon.</div>
+              </div>
+            </div>
+          \2'''
+
+          html, replaced = release_pattern.subn(replacement, html, count=1)
+          if replaced != 1:
+              raise SystemExit('Release section was not patched: expected id="releases" exactly once.')
+
+          # Remove immigration/status language without publishing personal context.
+          html = html.replace('North America', 'Dates announced soon')
+          html = html.replace('Visa in progress', '')
+
+          # Confirmed festival-name correction.
+          html = html.replace('Paradisco', 'Paradiso')
+
+          prohibited = [
+              'Freekquency Mixtape',
+              'Hit The Floor (And Dance)',
+              'In Your Eyes',
+              'Visa in progress',
+              'Paradisco',
+          ]
+          remaining = [text for text in prohibited if text in html]
+          if remaining:
+              raise SystemExit(f'Prohibited copy remains: {remaining}')
+
+          required = ['NEW MUSIC IN PROGRESS', 'Release updates announced soon.', 'Paradiso']
+          missing = [text for text in required if text not in html]
+          if missing:
+              raise SystemExit(f'Required replacement copy missing: {missing}')
+
+          if len(html) < original_size * 0.70:
+              raise SystemExit('Safety stop: resulting HTML is unexpectedly small.')
+
+          path.write_text(html, encoding='utf-8')
+          print(f'Patched index.html: {original_size} -> {len(html)} characters')
+          PY
+
+      - name: Commit urgent update and remove one-time workflow
+        shell: bash
+        run: |
+          rm .github/workflows/urgent-site-patch.yml
+          git config user.name "Go Freek Site Patch"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html .github/workflows/urgent-site-patch.yml
+          git commit -m "Remove delayed release schedule and visa status"
+          git push
