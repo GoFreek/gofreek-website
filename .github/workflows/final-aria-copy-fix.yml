@@ -1,0 +1,48 @@
+name: Final ARIA ticker correction
+
+on:
+  push:
+    paths:
+      - '.github/workflows/final-aria-copy-fix.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch-site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Correct remaining ARIA ticker copy
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('index.html')
+          html = path.read_text(encoding='utf-8')
+          old = 'ARIA CLUB CHART #1 9 WEEKS'
+          new = 'ARIA CLUB CHART #1 3 WEEKS'
+          count = html.count(old)
+          if count == 0:
+              raise SystemExit('Expected ARIA ticker wording not found.')
+          html = html.replace(old, new)
+          if old in html:
+              raise SystemExit('Old ARIA ticker wording remains.')
+          path.write_text(html, encoding='utf-8')
+          print(f'Corrected {count} ARIA ticker occurrence(s).')
+          PY
+
+      - name: Commit correction and remove one-time workflow
+        shell: bash
+        run: |
+          rm .github/workflows/final-aria-copy-fix.yml
+          git config user.name "Go Freek Site Patch"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html .github/workflows/final-aria-copy-fix.yml
+          git commit -m "Correct remaining ARIA ticker claim"
+          git push
