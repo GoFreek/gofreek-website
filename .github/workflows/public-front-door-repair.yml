@@ -1,0 +1,86 @@
+name: Public front door repair
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'repair.trigger'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Apply bounded public-front-door repair
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          def replace_exact(old, new, expected):
+              global s
+              count = s.count(old)
+              if count != expected:
+                  raise SystemExit(f'Expected {expected} occurrence(s), found {count}: {old[:120]!r}')
+              s = s.replace(old, new)
+
+          old_bio = '<p>Go Freek is Caleb Crinis, an Australian electronic producer and DJ based in Germany. His music sits where house, electro and left-field club pressure meet, filtered through a sound he calls Gutter Tech: physical drums, distorted low end, sharp hooks and strange details that survive outside the club as well as inside it. His catalogue includes the ARIA Gold Dom Dolla collaboration Define, which topped the ARIA Club Chart for three consecutive weeks. The current chapter is built around new music, selective live proof and a more authored Go Freek world.</p>'
+          new_bio = '<p>Go Freek (Caleb Crinis) is an Australian electronic producer and DJ based in Germany, known for his self-defined Gutter Tech sound: tech house, ghetto tech and old-school electro driven by distorted bass, industrial textures and tribal percussion. Active for more than a decade and operating as a solo project since 2019, his catalogue spans Sweat It Out / Club Sweat, Musical Freedom, mau5trap and Solotoko. It includes the ARIA Gold, #1 ARIA Club Chart collaboration “Define” with Dom Dolla, alongside international appearances including EDC Las Vegas and Beyond Wonderland.</p>'
+          replace_exact(old_bio, new_bio, 1)
+
+          replace_exact('CLUB CHART<br>3 CONSECUTIVE WEEKS', 'CLUB CHART', 1)
+          replace_exact('<div class="cred-row"><div class="dot"></div><div><strong>ARIA Club Chart #1</strong>, 3 consecutive weeks</div></div>', '<div class="cred-row"><div class="dot"></div><div><strong>ARIA Club Chart #1</strong></div></div>', 1)
+          replace_exact('<div class="cred-row"><div class="dot"></div><div><strong>Warner Bros. Sync</strong>, We Are Your Friends (2015)</div></div>\n', '', 1)
+          replace_exact('ARIA CLUB CHART #1 3 CONSECUTIVE WEEKS', 'ARIA CLUB CHART #1', 2)
+          replace_exact('<span class="ticker-item">WARNER BROS. SYNC</span><span class="ticker-sep">·</span>\n', '', 2)
+
+          old_meta = '<meta name="description" content="Go Freek is Australian electronic producer and DJ Caleb Crinis, based in Germany, making house, electro and left-field club music through a Gutter Tech filter.">'
+          new_meta = '<meta name="description" content="Go Freek (Caleb Crinis) is an Australian electronic producer and DJ based in Germany, creator of the Gutter Tech sound. Official music, bio and TMRW bookings.">'
+          replace_exact(old_meta, new_meta, 1)
+
+          forbidden = [
+              '3 CONSECUTIVE WEEKS',
+              '3 consecutive weeks',
+              'WARNER BROS. SYNC',
+              'Warner Bros. Sync',
+              'We Are Your Friends (2015)',
+          ]
+          for text in forbidden:
+              if text in s:
+                  raise SystemExit(f'Forbidden public claim remains after patch: {text!r}')
+
+          required = [
+              'ARIA <span class="accent">GOLD</span>',
+              '<span class="stat-num"><span class="accent">#1</span> ARIA</span>',
+              '<span class="stat-num">EDC</span>',
+              new_bio,
+              '<strong>ARIA Club Chart #1</strong>',
+              'Paul Azzopardi / TMRW',
+              'paul.azzopardi@tmrw.com.au',
+              new_meta,
+          ]
+          for text in required:
+              if text not in s:
+                  raise SystemExit(f'Required content missing after patch: {text[:120]!r}')
+
+          p.write_text(s, encoding='utf-8')
+          print('Bounded public-front-door repair QA passed.')
+          PY
+
+      - name: Commit repair and remove one-shot tooling
+        shell: bash
+        run: |
+          rm -f .github/workflows/public-front-door-repair.yml repair.trigger
+          git config user.name "GoFreek Site Repair"
+          git config user.email "gofreekdjs@gmail.com"
+          git add -A
+          git commit -m "Repair public front door truth and positioning"
+          git push origin HEAD:main
