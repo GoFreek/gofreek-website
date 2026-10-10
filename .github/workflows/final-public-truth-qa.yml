@@ -1,0 +1,124 @@
+name: Final public truth QA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'final-truth-qa.trigger'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Apply bounded final truth QA
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          def replace_exact(old, new, expected=1):
+              global s
+              count = s.count(old)
+              if count != expected:
+                  raise SystemExit(f'Expected {expected} occurrence(s), found {count}: {old[:140]!r}')
+              s = s.replace(old, new)
+
+          def replace_row(label, new_inner):
+              global s
+              pattern = re.compile(r'(<div class="cred-row"><div class="dot"></div><div><strong>' + re.escape(label) + r'</strong>).*?(</div></div>)')
+              matches = list(pattern.finditer(s))
+              if len(matches) != 1:
+                  raise SystemExit(f'Expected exactly 1 {label!r} proof row, found {len(matches)}')
+              s = pattern.sub(r'\1 ' + new_inner + r'\2', s, count=1)
+
+          # 1. SoundCloud visible label only. Destination stays untouched.
+          replace_exact('<div class="link-title">The Compound Tape Series</div>', '<div class="link-title">SoundCloud</div>')
+
+          # 2. Conservative canonical public proof set.
+          replace_row('Labels:', 'Sweat It Out / Club Sweat · Musical Freedom · mau5trap · Solotoko')
+          replace_row('Remixes:', 'deadmau5 &amp; Wolfgang Gartner — “Channel 43”')
+          # Normalize row label from plural to the requested singular form.
+          replace_exact('<strong>Remixes:</strong> deadmau5 &amp; Wolfgang Gartner — “Channel 43”', '<strong>Official remix:</strong> deadmau5 &amp; Wolfgang Gartner — “Channel 43”')
+          replace_row('Festivals:', 'EDC Las Vegas · Beyond Wonderland')
+
+          # Publishing remains unchanged but must exist exactly once.
+          publishing = '<strong>Publishing:</strong> Sweat It Out'
+          if s.count(publishing) != 1:
+              raise SystemExit(f'Expected exactly one publishing proof line, found {s.count(publishing)}')
+
+          canonical_bio = '<p>Go Freek (Caleb Crinis) is an Australian electronic producer and DJ based in Germany, known for his self-defined Gutter Tech sound: tech house, ghetto tech and old-school electro driven by distorted bass, industrial textures and tribal percussion. Active for more than a decade and operating as a solo project since 2019, his catalogue spans Sweat It Out / Club Sweat, Musical Freedom, mau5trap and Solotoko. It includes the ARIA Gold, #1 ARIA Club Chart collaboration “Define” with Dom Dolla, alongside international appearances including EDC Las Vegas and Beyond Wonderland.</p>'
+          canonical_meta = '<meta name="description" content="Go Freek (Caleb Crinis) is an Australian electronic producer and DJ based in Germany, creator of the Gutter Tech sound. Official music, bio and TMRW bookings.">'
+
+          required = [
+              canonical_bio,
+              canonical_meta,
+              'ARIA <span class="accent">GOLD</span>',
+              '<strong>ARIA Club Chart #1</strong>',
+              'EDC LAS VEGAS',
+              'Paul Azzopardi / TMRW',
+              'paul.azzopardi@tmrw.com.au',
+              '<div class="link-title">SoundCloud</div>',
+              'https://soundcloud.com/gofreek',
+              '<strong>Labels:</strong> Sweat It Out / Club Sweat · Musical Freedom · mau5trap · Solotoko',
+              '<strong>Official remix:</strong> deadmau5 &amp; Wolfgang Gartner — “Channel 43”',
+              '<strong>Festivals:</strong> EDC Las Vegas · Beyond Wonderland',
+              publishing,
+          ]
+          for text in required:
+              if text not in s:
+                  raise SystemExit(f'Required final source content missing: {text[:140]!r}')
+
+          forbidden_literals = [
+              '3 CONSECUTIVE WEEKS',
+              '3 consecutive weeks',
+              'Warner Bros',
+              'WARNER BROS',
+              'We Are Your Friends',
+              'The Compound Tape Series',
+              'Paradiso',
+              'Steve Aoki',
+              'Crookers',
+              'monthly Spotify listeners',
+              'catalog streams',
+              'catalogue streams',
+              'Total Streams',
+              'BITN launch',
+              'Bump In The Night Records',
+          ]
+          for text in forbidden_literals:
+              if text in s:
+                  raise SystemExit(f'Forbidden/stale public proof remains: {text!r}')
+
+          # Catch chart-duration and common mutable metric variants case-insensitively.
+          forbidden_patterns = [
+              r'ARIA[^<\n]{0,80}\b(?:week|weeks)\b',
+              r'\b\d[\d,.]*\s*[KMB]\+?\s+(?:monthly\s+)?listeners\b',
+              r'\b\d[\d,.]*\s*(?:million|billion)\s+(?:catalog(?:ue)?\s+)?streams?\b',
+          ]
+          for pat in forbidden_patterns:
+              if re.search(pat, s, flags=re.I):
+                  raise SystemExit(f'Forbidden public wording matched pattern: {pat!r}')
+
+          p.write_text(s, encoding='utf-8')
+          print('Final bounded truth QA passed.')
+          PY
+
+      - name: Commit repair and remove one-shot tooling
+        shell: bash
+        run: |
+          rm -f .github/workflows/final-public-truth-qa.yml final-truth-qa.trigger
+          git config user.name "GoFreek Site QA"
+          git config user.email "gofreekdjs@gmail.com"
+          git add -A
+          git commit -m "Finalize public proof lines and SoundCloud label"
+          git push origin HEAD:main
