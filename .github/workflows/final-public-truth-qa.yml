@@ -41,13 +41,18 @@ jobs:
                   raise SystemExit(f'Expected exactly 1 {label!r} proof row, found {len(matches)}')
               s = pattern.sub(r'\1 ' + new_inner + r'\2', s, count=1)
 
-          # 1. SoundCloud visible label only. Destination stays untouched.
-          replace_exact('<div class="link-title">The Compound Tape Series</div>', '<div class="link-title">SoundCloud</div>')
+          # 1. SoundCloud visible title only, anchored to the existing destination.
+          soundcloud = re.compile(r'(<a\b[^>]*href="https://soundcloud\.com/gofreek"[^>]*>.*?<div class="link-title">)(.*?)(</div>)', re.S)
+          matches = list(soundcloud.finditer(s))
+          if len(matches) != 1:
+              raise SystemExit(f'Expected exactly one Go Freek SoundCloud link/title block, found {len(matches)}')
+          old_soundcloud_title = matches[0].group(2).strip()
+          s = soundcloud.sub(r'\1SoundCloud\3', s, count=1)
+          print(f'SoundCloud title changed from {old_soundcloud_title!r} to "SoundCloud"; href preserved.')
 
           # 2. Conservative canonical public proof set.
           replace_row('Labels:', 'Sweat It Out / Club Sweat · Musical Freedom · mau5trap · Solotoko')
           replace_row('Remixes:', 'deadmau5 &amp; Wolfgang Gartner — “Channel 43”')
-          # Normalize row label from plural to the requested singular form.
           replace_exact('<strong>Remixes:</strong> deadmau5 &amp; Wolfgang Gartner — “Channel 43”', '<strong>Official remix:</strong> deadmau5 &amp; Wolfgang Gartner — “Channel 43”')
           replace_row('Festivals:', 'EDC Las Vegas · Beyond Wonderland')
 
@@ -99,7 +104,6 @@ jobs:
               if text in s:
                   raise SystemExit(f'Forbidden/stale public proof remains: {text!r}')
 
-          # Catch chart-duration and common mutable metric variants case-insensitively.
           forbidden_patterns = [
               r'ARIA[^<\n]{0,80}\b(?:week|weeks)\b',
               r'\b\d[\d,.]*\s*[KMB]\+?\s+(?:monthly\s+)?listeners\b',
