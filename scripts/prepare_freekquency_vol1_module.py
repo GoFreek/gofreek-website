@@ -1,0 +1,142 @@
+from pathlib import Path
+import re
+
+p = Path("index.html")
+s = p.read_text(encoding="utf-8")
+
+if 'id="freekquency"' in s or 'FREEKQUENCY VOL.1</h2>' in s:
+    raise SystemExit("FREEKQUENCY module already exists; refusing duplicate insertion.")
+
+css = r'''
+
+  /* ── FREEKQUENCY VOL.1 ── */
+  .freekquency-section {
+    padding: 84px 40px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .freekquency-shell {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 36px;
+    align-items: end;
+    padding: 34px 36px;
+    border: 1px solid #242424;
+    background: linear-gradient(135deg, rgba(255,40,0,0.075), rgba(170,255,0,0.025) 55%, rgba(255,255,255,0.015));
+  }
+
+  .freekquency-kicker {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 12px;
+  }
+
+  .freekquency-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(54px, 7vw, 96px);
+    line-height: 0.92;
+    letter-spacing: 1px;
+    color: var(--white);
+    margin: 0 0 18px;
+  }
+
+  .freekquency-copy {
+    max-width: 720px;
+    color: var(--dim);
+    font-size: 16px;
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  .freekquency-meta {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    line-height: 1.6;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #666;
+    margin-top: 18px;
+  }
+
+  .freekquency-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 230px;
+    padding: 14px 18px;
+    border: 1px solid var(--green);
+    color: var(--green);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .freekquency-action:hover {
+    background: var(--green);
+    color: var(--black);
+  }
+
+  @media (max-width: 720px) {
+    .freekquency-section { padding: 60px 20px; }
+    .freekquency-shell {
+      grid-template-columns: 1fr;
+      align-items: start;
+      padding: 26px 24px;
+      gap: 26px;
+    }
+    .freekquency-action { width: 100%; min-width: 0; }
+  }
+'''
+
+if "</style>" not in s:
+    raise SystemExit("Head style terminator not found.")
+s = s.replace("</style>", css + "\n</style>", 1)
+
+bio_pattern = re.compile(r'''(?m)^\s*<section\b[^>]*\bid=["']bio["'][^>]*>''')
+matches = list(bio_pattern.finditer(s))
+if len(matches) != 1:
+    raise SystemExit(f"Expected exactly one bio section; found {len(matches)}.")
+
+module = r'''  <section id="freekquency" class="freekquency-section">
+    <div class="freekquency-shell fade-in">
+      <div>
+        <div class="freekquency-kicker">Long-form DJ series · Vol.1 live</div>
+        <h2 class="freekquency-title">FREEKQUENCY VOL.1</h2>
+        <p class="freekquency-copy">Go Freek's long-form DJ mix series. Vol.1 is a continuous authored club-world transmission, built to show the room beyond the singles.</p>
+        <div class="freekquency-meta">Originally released 21 May 2026 · SoundCloud</div>
+      </div>
+      <a class="freekquency-action" href="https://soundcloud.com/gofreek/freekquency-vol-1-1" target="_blank" rel="noopener noreferrer" aria-label="Listen to FREEKQUENCY VOL.1 on SoundCloud">Listen on SoundCloud →</a>
+    </div>
+  </section>'''
+
+pos = matches[0].start()
+s = s[:pos] + module + "\n\n" + s[pos:]
+
+required = [
+    'id="freekquency"',
+    'FREEKQUENCY VOL.1</h2>',
+    'https://soundcloud.com/gofreek/freekquency-vol-1-1',
+    'Originally released 21 May 2026',
+    'id="bio"',
+]
+for item in required:
+    if item not in s:
+        raise SystemExit(f"Required source content missing after patch: {item}")
+
+if s.index('id="freekquency"') > s.index('id="bio"'):
+    raise SystemExit("FREEKQUENCY module was not inserted before bio section.")
+
+if "youtube.com" in module.lower() or "Watch on YouTube" in module:
+    raise SystemExit("YouTube must not be exposed before the object is LIVE.")
+
+p.write_text(s, encoding="utf-8")
+print("FREEKQUENCY Vol.1 website module source patch passed.")
